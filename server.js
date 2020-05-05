@@ -50,21 +50,15 @@ app.ws('/ws', (ws, req) => {
 
     const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log(`****** connect new client: ${ipaddr}`);
-    console.log(`>>> ws clients : (${connects.length})`);
 
     ws.on('message', message => {
-        console.log('Received -', message);
-        console.log('rptoken', message.rptoken);
-        console.log('sender', message.sender);
-        console.log('message', message.message);
-        if (message.rptoken) {
-            client.replyMessage(message.rptoken, {
+        const message_data = JSON.parse(message);
+        console.log('Received -', message_data);
+        if (message_data.rptoken) {
+            client.replyMessage(message_data.rptoken, {
                 type: "text",
-                text: `${message.sender}さん、${message.message}`
+                text: `${message_data.sender}さん、${message_data.message}`
             });
-        }
-        else {
-            console.log('*********** failed to reply');
         }
     });
 
