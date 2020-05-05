@@ -30,11 +30,11 @@ app.post('/hook', line.middleware(config), (req, res) => {
         const prof = await client.getProfile(ev.source.userId);
         console.log(prof, ev.message, `>>> ws clients : (${connects.length})`);
         connects.forEach(conn => {
-            conn.send({
+            conn.send(JSON.stringify({
                 rptoken: ev.replyToken,
                 sender:  prof.displayName,
                 message: ev.message.text
-            });
+            }));
         });
     });
 });
