@@ -28,7 +28,7 @@ app.post('/hook', line.middleware(config), (req, res) => {
 
     events.forEach(async ev => {
         const prof = await client.getProfile(ev.source.userId);
-        console.log(prof, ev.message, `>>> ws clients : (${connects.length})`),
+        console.log(prof, ev.message, `>>> ws clients : (${connects.length})`);
         connects.forEach(conn => {
             conn.send({
                 rptoken: ev.replyToken,
@@ -50,6 +50,7 @@ app.ws('/ws', (ws, req) => {
 
     const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log(`****** connect new client: ${ipaddr}`);
+    console.log(`>>> ws clients : (${connects.length})`);
 
     ws.on('message', message => {
         console.log('Received -', message);
