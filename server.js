@@ -28,7 +28,7 @@ app.post('/hook', line.middleware(config), (req, res) => {
 
     events.forEach(async ev => {
         const prof = await client.getProfile(ev.source.userId);
-        console.log(prof, ev.message),
+        console.log(prof, ev.message, `>>> ws clients : (${connects.length})`),
         connects.forEach(conn => {
             conn.send({
                 rptoken: ev.replyToken,
