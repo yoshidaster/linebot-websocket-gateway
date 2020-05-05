@@ -54,11 +54,17 @@ app.ws('/ws', (ws, req) => {
 
     ws.on('message', message => {
         console.log('Received -', message);
+        console.log('rptoken', message.rptoken);
+        console.log('sender', message.sender);
+        console.log('message', message.message);
         if (message.rptoken) {
             client.replyMessage(message.rptoken, {
                 type: "text",
                 text: `${message.sender}さん、${message.message}`
             });
+        }
+        else {
+            console.log('*********** failed to reply');
         }
     });
 
