@@ -54,7 +54,7 @@ app.ws('/ws', (ws, req) => {
 
     ws.on('message', message => {
         console.log('Received -', message);
-        if (message.rptoken.length) {
+        if (message.rptoken) {
             client.replyMessage(message.rptoken, {
                 type: "text",
                 text: `${message.sender}さん、${message.message}`
