@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+        <title>LINK to Scratch BOT</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body>
+        <div id="app" class="container-fluid">
+            <div class="row">
+                <div class="col text-center">
+                    <h3>{{appToken}}</h3>
+                    <div>
+                        <button @click=refreshToken type="button" class="btn btn-primary btn-block">トークンをリセット</button>
+                    </div>
+                </div>
+            </div>
+            <button @click=logout type="button" class="btn btn-light btn-block">ログアウトする</button>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+        <script>const liffId = '<%= liffId %>';</script>
+        <script src="liff-login.js"></script>
+    </body>
+</html>
