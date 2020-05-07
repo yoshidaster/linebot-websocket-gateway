@@ -5,10 +5,9 @@ const app = express();
 const expressWs = require('express-ws')(app);
 const morgan = require('morgan');
 const redis = require('ioredis').createClient();
-const line = require("@line/bot-sdk");
 
 app.use(morgan('combined'));
-app.use(express.static('static'));
+app.use('/static/', express.static('static'));
 app.set("view engine", "ejs");
 app.set('port', process.env.PORT || 3000);
 
@@ -20,26 +19,24 @@ const lineConfig = {
 };
 
 const linkController = require('./routes/link')({
-    liff_id:   process.env.LIFF_ID,
-    client_id: process.env.CLIENT_ID,
+    liffId: process.env.LIFF_ID,
+    clientId: process.env.CLIENT_ID,
     redis: redis
 });
-app.get('/link', linkController.link);
-app.post('/issueToken', express.json(), linkController.issueToken);
+app.use(linkController);
 
 const hookController = require('./routes/hook')({
-    connects:   connects,
+    connects: connects,
     lineConfig: lineConfig,
     redis: redis
 });
-app.post('/hook', line.middleware(lineConfig), hookController.hook);
+app.use(hookController);
 
 const wsController = require('./routes/ws')({
-    connects:   connects,
-    lineConfig: lineConfig,
-    redis: redis
+    connects: connects,
+    lineConfig: lineConfig
 });
-app.ws('/ws', wsController.ws);
+app.use(wsController);
 
 app.listen(app.get('port'), () => {
     console.log('Server listening on port %s', app.get('port'));

@@ -3,6 +3,7 @@
 const app = new Vue({
     el: '#app',
     data: {
+        isInClient: true,
         appToken: '',
         userId: '',
     },
@@ -11,7 +12,7 @@ const app = new Vue({
         issueAppToken: async function(refresh){
             var self = this;
             const idToken = liff.getIDToken();
-            fetch('./issueToken', {
+            fetch('issueToken', {
                 method: 'post',
                 cache: 'no-cache',
                 headers: {
@@ -52,6 +53,7 @@ const app = new Vue({
         })
         .then(() => {
             if (liff.isInClient() || liff.isLoggedIn()) {
+                this.isInClient = liff.isInClient();
                 this.issueAppToken(false);
             } else {
                 liff.login();

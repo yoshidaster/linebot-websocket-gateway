@@ -11,18 +11,18 @@
         <div id="app" class="container-fluid">
             <div class="row">
                 <div class="col text-center">
-                    <h3>{{appToken}}</h3>
+                    <h3 class="display-3">{{appToken}}</h3>
                     <div>
-                        <button @click=refreshToken type="button" class="btn btn-primary btn-block">トークンをリセット</button>
+                        <button @click=refreshToken type="button" class="btn btn-primary btn-lg btn-block">トークンをリセット</button>
                     </div>
                 </div>
             </div>
-            <button @click=logout type="button" class="btn btn-light btn-block">ログアウトする</button>
+            <button v-if="!isInClient" @click=logout type="button" class="btn btn-light btn-block">ログアウトする</button>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
         <script>const liffId = '<%= liffId %>';</script>
-        <script src="liff-login.js"></script>
+        <script src="/static/liff-login.js"></script>
     </body>
 </html>
