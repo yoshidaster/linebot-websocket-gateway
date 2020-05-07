@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const expressWs = require('express-ws')(app);
 const morgan = require('morgan');
-const redis = require('ioredis').createClient();
+const redis = require('ioredis').createClient(process.env.REDIS_URL || '127.0.0.1');
 
 app.use(morgan('combined'));
 app.use('/static/', express.static('static'));
