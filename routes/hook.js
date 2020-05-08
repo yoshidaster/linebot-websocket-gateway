@@ -17,6 +17,8 @@ module.exports = (g) => {
             const appToken = await g.redis.get(`app-token:${userId}`);
             const wsClients = g.connects[appToken];
 
+            console.log(ev);
+
             if (! wsClients) {
                 lineClient.replyMessage(ev.replyToken, {
                     type: "text",
