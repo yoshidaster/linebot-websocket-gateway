@@ -31,8 +31,9 @@ module.exports = (g) => {
                 g.redis.setex(`reply-token:${appToken}:${ev.message.id}`, 60, ev.replyToken);
                 const prof = await lineClient.getProfile(ev.source.userId);
                 wsClients.send(JSON.stringify({
-                    sender: prof.displayName,
-                    text: ev.message.text
+                    id: ev.message.id,
+                    text: ev.message.text,
+                    sender: prof.displayName
                 }));
             }
         });

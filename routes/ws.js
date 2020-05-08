@@ -25,7 +25,7 @@ module.exports = (g) => {
             const replyMessage = JSON.parse(message);
             console.log('Received -', replyMessage);
 
-            const replyToken = await g.redis.get(`reply-token:${appToken}:${ev.message.id}`);
+            const replyToken = await g.redis.get(`reply-token:${appToken}:${replyMessage.id}`);
             if (replyToken) {
                 lineClient.replyMessage(replyToken, {
                     type: "text",
