@@ -22,13 +22,14 @@ module.exports = (g) => {
         console.log(`****** connect new client: ${ipaddr}`);
 
         ws.on('message', message => {
-            const messageData = JSON.parse(message);
-            console.log('Received -', messageData);
+            const replyMessage = JSON.parse(message);
+            console.log('Received -', replyMessage);
 
-            if (messageData.rptoken) {
-                lineClient.replyMessage(messageData.rptoken, {
+            const replyToken = await g.redis.get(`reply-token:${appToken}:${ev.message.id}`);
+            if (replyToken) {
+                lineClient.replyMessage(replyToken, {
                     type: "text",
-                    text: `${messageData.sender}さん、${messageData.message}`
+                    text: replyMessage.text
                 });
             }
         });

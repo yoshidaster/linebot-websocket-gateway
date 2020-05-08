@@ -17,8 +17,6 @@ module.exports = (g) => {
             const appToken = await g.redis.get(`app-token:${userId}`);
             const wsClients = g.connects[appToken];
 
-            console.log(ev);
-
             if (! wsClients) {
                 lineClient.replyMessage(ev.replyToken, {
                     type: "text",
@@ -30,11 +28,11 @@ module.exports = (g) => {
                     text: 'text メッセージ以外は受け付けられません'
                 });
             } else {
+                g.redis.setex(`reply-token:${appToken}:${ev.message.id}`, 60, ev.replyToken);
                 const prof = await lineClient.getProfile(ev.source.userId);
                 wsClients.send(JSON.stringify({
-                    rptoken: ev.replyToken,
-                    sender:  prof.displayName,
-                    message: ev.message.text
+                    sender: prof.displayName,
+                    text: ev.message.text
                 }));
             }
         });
