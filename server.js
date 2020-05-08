@@ -34,7 +34,8 @@ app.use(hookController);
 
 const wsController = require('./routes/ws')({
     connects: connects,
-    lineConfig: lineConfig
+    lineConfig: lineConfig,
+    redis: redis
 });
 app.use(wsController);
 
