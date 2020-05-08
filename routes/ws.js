@@ -21,7 +21,7 @@ module.exports = (g) => {
         const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         console.log(`****** connect new client: ${ipaddr}`);
 
-        ws.on('message', message => {
+        ws.on('message', async message => {
             const replyMessage = JSON.parse(message);
             console.log('Received -', replyMessage);
 
