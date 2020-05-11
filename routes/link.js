@@ -36,6 +36,7 @@ module.exports = (g) => {
             if (! appToken) {
                 appToken = crypto.randomBytes(3).toString('hex');
                 g.redis.setex(`app-token:${userId}`, TOKEN_EXPIRES, appToken);
+                g.redis.setex(`user-id:${appToken}`, TOKEN_EXPIRES, userId);
             }
 
             res.json({

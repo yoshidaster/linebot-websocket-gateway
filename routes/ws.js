@@ -8,7 +8,7 @@ module.exports = (g) => {
 
     const lineClient = new line.Client(g.lineConfig);
 
-    router.ws('/ws', (ws, req) => {
+    router.ws('/ws', async (ws, req) => {
         const appToken = req.query.token;
         if (! appToken) {
             ws.close();
@@ -17,6 +17,14 @@ module.exports = (g) => {
         }
 
         g.connects[appToken] = ws;
+
+        const userId = await g.redis.get(`user-id:${appToken}`);
+        if (userId) {
+            lineClient.pushMessage(userId, {
+                type: "text",
+                text: "応答アプリケーションが接続しました"
+            });
+        }
 
         const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         console.log(`****** connect new client: ${ipaddr}`);
@@ -34,8 +42,16 @@ module.exports = (g) => {
             }
         });
 
-        ws.on('close', () => {
+        ws.on('close', async () => {
             delete g.connects[appToken];
+            const userId = await g.redis.get(`user-id:${appToken}`);
+            if (userId) {
+                lineClient.pushMessage(userId, {
+                    type: "text",
+                    text: "応答アプリケーションの接続が切れました"
+                });
+                g.redis.delete(`user-id:${appToken}`);
+            }
         });
     });
 
