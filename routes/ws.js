@@ -16,15 +16,19 @@ module.exports = (g) => {
             return;
         }
 
-        g.connects[appToken] = ws;
-
         const userId = await g.redis.get(`user-id:${appToken}`);
-        if (userId) {
-            lineClient.pushMessage(userId, {
-                type: "text",
-                text: "応答アプリケーションが接続しました"
-            });
+        if (! userId) {
+            ws.close();
+            console.log('****** reject connection: user not exist');
+            return;
         }
+
+        lineClient.pushMessage(userId, {
+            type: "text",
+            text: "応答アプリケーションが接続しました"
+        });
+
+        g.connects[appToken] = ws;
 
         const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         console.log(`****** connect new client: ${ipaddr}`);
