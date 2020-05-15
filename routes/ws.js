@@ -34,14 +34,22 @@ module.exports = (g) => {
         console.log(`****** connect new client: ${ipaddr}`);
 
         ws.on('message', async message => {
-            const replyMessage = JSON.parse(message);
-            console.log('Received -', replyMessage);
+            const receivedMessage = JSON.parse(message);
+            console.log('Received -', receivedMessage);
 
-            const replyToken = await g.redis.get(`reply-token:${appToken}:${replyMessage.id}`);
-            if (replyToken) {
-                lineClient.replyMessage(replyToken, {
+            if (receivedMessage.mode === "reply") {
+                const replyToken = await g.redis.get(`reply-token:${appToken}:${replyMessage.id}`);
+                if (replyToken) {
+                    lineClient.replyMessage(replyToken, {
+                        type: "text",
+                        text: receivedMessage.text
+                    });
+                }
+            }
+            else if (receivedMessage.mode === "push") {
+                lineClient.pushMessage(userId, {
                     type: "text",
-                    text: replyMessage.text
+                    text: receivedMessage.text
                 });
             }
         });
