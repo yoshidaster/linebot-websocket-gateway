@@ -38,7 +38,7 @@ module.exports = (g) => {
             console.log('Received -', receivedMessage);
 
             if (receivedMessage.mode === "reply") {
-                const replyToken = await g.redis.get(`reply-token:${appToken}:${replyMessage.id}`);
+                const replyToken = await g.redis.get(`reply-token:${appToken}:${receivedMessage.id}`);
                 if (replyToken) {
                     lineClient.replyMessage(replyToken, {
                         type: "text",
